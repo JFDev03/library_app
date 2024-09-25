@@ -1,0 +1,3 @@
+[submodule "WebApp/frontend"]
+	path = WebApp/frontend
+	url = https://github.com/JFDev03/frontend.git
