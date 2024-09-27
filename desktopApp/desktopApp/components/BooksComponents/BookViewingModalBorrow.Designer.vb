@@ -175,6 +175,7 @@ Partial Class BookViewingModalBorrow
         Controls.Add(book_picture)
         FormBorderStyle = FormBorderStyle.None
         Name = "BookViewingModalBorrow"
+        StartPosition = FormStartPosition.CenterParent
         Text = "BookViewingModalBorrow"
         CType(book_picture, ComponentModel.ISupportInitialize).EndInit()
         ResumeLayout(False)

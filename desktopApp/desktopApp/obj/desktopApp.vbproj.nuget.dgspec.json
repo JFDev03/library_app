@@ -48,9 +48,29 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "SocketIOClient": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "SocketIoClientDotNet": {
+              "target": "Package",
+              "version": "[0.9.13, )"
+            },
+            "SocketIoClientDotNet.Standard": {
+              "target": "Package",
+              "version": "[0.0.6, )"
+            },
             "System.Reactive": {
               "target": "Package",
               "version": "[6.0.1, )"
+            },
+            "TS.SocketIOClient": {
+              "target": "Package",
+              "version": "[3.1.0.2, )"
+            },
+            "websocketsharp.core": {
+              "target": "Package",
+              "version": "[1.0.0, )"
             }
           },
           "imports": [

@@ -22,6 +22,7 @@ Partial Class mainLayout
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        components = New ComponentModel.Container()
         Dim resources As ComponentModel.ComponentResourceManager = New ComponentModel.ComponentResourceManager(GetType(mainLayout))
         TableLayoutPanel1 = New TableLayoutPanel()
         sidebar = New Panel()
@@ -41,6 +42,7 @@ Partial Class mainLayout
         profilePicture = New RoundPicturebox()
         Label1 = New Label()
         Panel5 = New Panel()
+        NotifyIcon = New NotifyIcon(components)
         TableLayoutPanel1.SuspendLayout()
         sidebar.SuspendLayout()
         CType(PictureBox5, ComponentModel.ISupportInitialize).BeginInit()
@@ -283,6 +285,12 @@ Partial Class mainLayout
         Panel5.Size = New Size(20, 139)
         Panel5.TabIndex = 4
         ' 
+        ' NotifyIcon
+        ' 
+        NotifyIcon.BalloonTipTitle = "New Notification"
+        NotifyIcon.Text = "NotifyIcon1"
+        NotifyIcon.Visible = True
+        ' 
         ' mainLayout
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
@@ -328,4 +336,5 @@ Partial Class mainLayout
     Friend WithEvents borrow_link As LinkLabel
     Friend WithEvents PictureBox3 As PictureBox
     Friend WithEvents books_link As LinkLabel
+    Friend WithEvents NotifyIcon As NotifyIcon
 End Class

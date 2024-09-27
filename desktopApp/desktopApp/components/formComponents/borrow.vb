@@ -30,6 +30,7 @@ Public Class borrow
         inputSubject.OnNext(searchBox.Text)
     End Sub
     Private Sub books_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         invokeData()
     End Sub
     Private Sub BookViewingModalBorrowl_VisibleChanged(sender As Object, e As EventArgs)

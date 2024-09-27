@@ -145,4 +145,9 @@ Public Class books
     Private Sub Button1_Click(sender As Object, e As EventArgs)
         displayData()
     End Sub
+
+    Private Sub bookDGV_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles bookDGV.CellContentClick
+        setBookParam(bookDGV.CurrentRow.Cells(2).Value, bookDGV.CurrentRow.Cells(3).Value, bookDGV.CurrentRow.Cells(4).Value, bookDGV.CurrentRow.Cells(5).Value, bookDGV.CurrentRow.Cells(6).Value, bookDGV.CurrentRow.Cells(7).Value, bookDGV.CurrentRow.Cells(8).Value, bookDGV.CurrentRow.Cells(9).Value, bookDGV.CurrentRow.Cells(10).Value)
+        BookView.ShowDialog()
+    End Sub
 End Class

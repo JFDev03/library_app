@@ -43,7 +43,8 @@ Public Class addBooksModal
         Return uniqueFileName
     End Function
 
-    Private Sub saveBtn_Click(sender As Object, e As EventArgs) Handles saveBtn.Click
+
+    Private Async Sub saveBtn_Click(sender As Object, e As EventArgs) Handles saveBtn.Click
         Dim quantity As Integer
 
         ' Try to parse the quantity from the text box
@@ -81,4 +82,5 @@ Public Class addBooksModal
     Private Sub close_btn_Click(sender As Object, e As EventArgs) Handles close_btn.Click
         Me.Close()
     End Sub
+
 End Class

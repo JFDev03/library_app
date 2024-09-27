@@ -41,7 +41,12 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MySql.Data" Version="9.0.0" />
+    <PackageReference Include="SocketIOClient" Version="3.1.2" />
+    <PackageReference Include="SocketIoClientDotNet" Version="0.9.13" />
+    <PackageReference Include="SocketIoClientDotNet.Standard" Version="0.0.6" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
+    <PackageReference Include="TS.SocketIOClient" Version="3.1.0.2" />
+    <PackageReference Include="websocketsharp.core" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

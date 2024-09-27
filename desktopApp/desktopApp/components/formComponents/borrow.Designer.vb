@@ -42,7 +42,7 @@ Partial Class borrow
         ' 
         textPage.Anchor = AnchorStyles.Bottom
         textPage.AutoSize = True
-        textPage.Location = New Point(413, 421)
+        textPage.Location = New Point(413, 410)
         textPage.Name = "textPage"
         textPage.Size = New Size(41, 15)
         textPage.TabIndex = 11
@@ -51,7 +51,7 @@ Partial Class borrow
         ' prev_btn
         ' 
         prev_btn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        prev_btn.Location = New Point(658, 414)
+        prev_btn.Location = New Point(658, 403)
         prev_btn.Name = "prev_btn"
         prev_btn.Size = New Size(61, 24)
         prev_btn.TabIndex = 10
@@ -61,7 +61,7 @@ Partial Class borrow
         ' next_btn
         ' 
         next_btn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        next_btn.Location = New Point(725, 414)
+        next_btn.Location = New Point(725, 403)
         next_btn.Name = "next_btn"
         next_btn.Size = New Size(61, 24)
         next_btn.TabIndex = 9
@@ -141,6 +141,7 @@ Partial Class borrow
         Controls.Add(searchBox)
         Controls.Add(borrowDGV)
         ForeColor = SystemColors.ControlText
+        FormBorderStyle = FormBorderStyle.None
         Name = "borrow"
         Text = "borrow"
         CType(borrowDGV, ComponentModel.ISupportInitialize).EndInit()

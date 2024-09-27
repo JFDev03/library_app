@@ -1,10 +1,10 @@
-﻿Imports Org.BouncyCastle.Asn1.X500
-
+﻿
 Public Class mainLayout
     Dim Radius As New roundedForms()
     Private AForm As Form
     Private currentButton As Button
     Private isFirstLoad As Boolean = True
+    Public connectionSOcket As Task
 
     Public Sub New()
         ' This call is required by the designer.

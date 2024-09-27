@@ -1,7 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Net.Sockets
+Imports MySql.Data.MySqlClient
 Imports Mysqlx.Crud
 
 Public Class BookViewingModalBorrow
+
     Dim Config As New dbConfig
     Dim utils As New utils
     Dim Connection As MySqlConnection = Config.setConnection("localhost", "library_system_db", "root", "")

@@ -50,3 +50,14 @@ C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-w
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.addBooksModal.resources
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\System.Reactive.dll
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.BookViewingModalBorrow.resources
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\EngineIoClientDotNet.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SocketIoClientDotNet.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\WebSocket4Net.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\websocket-sharp-core.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SocketIO.Core.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SocketIO.Serializer.Core.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SocketIO.Serializer.SystemTextJson.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SocketIOClient.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\SuperSocket.ClientEngine.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.BookView.resources

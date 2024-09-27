@@ -74,7 +74,8 @@ export const getBorrowedBooks =async (req:Request,res:Response) => {
                b.book_name LIKE ? OR
                b.author LIKE ? OR 
                b.genre LIKE ?)
-        AND a.employee_id = ?
+        AND a.employee_id = ? 
+        AND a.status = 'borrowed'
         
         `
         const totalResult = await executeQuery(totalQuery, [searchTerm,searchTerm,searchTerm,searchTerm,employee_id]) as Array<totalPagesQuery>;
@@ -91,8 +92,10 @@ export const getBorrowedBooks =async (req:Request,res:Response) => {
         b.author LIKE ? OR 
         b.genre LIKE ?)
  AND a.employee_id = ? 
+ AND a.status = 'borrowed'
  ORDER BY a.id DESC 
- LIMIT ?, ?
+ LIMIT ?, ?;
+ 
  `
           const books = await executeQuery(query,[searchTerm,searchTerm,searchTerm,searchTerm,employee_id,offset,limit])
 

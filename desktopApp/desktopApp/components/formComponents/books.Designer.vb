@@ -135,7 +135,7 @@ Partial Class books
         ' next_btn
         ' 
         next_btn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        next_btn.Location = New Point(727, 427)
+        next_btn.Location = New Point(727, 408)
         next_btn.Name = "next_btn"
         next_btn.Size = New Size(61, 24)
         next_btn.TabIndex = 4
@@ -145,7 +145,7 @@ Partial Class books
         ' prev_btn
         ' 
         prev_btn.Anchor = AnchorStyles.Bottom Or AnchorStyles.Right
-        prev_btn.Location = New Point(660, 427)
+        prev_btn.Location = New Point(660, 408)
         prev_btn.Name = "prev_btn"
         prev_btn.Size = New Size(61, 24)
         prev_btn.TabIndex = 5
@@ -156,7 +156,7 @@ Partial Class books
         ' 
         textPage.Anchor = AnchorStyles.Bottom
         textPage.AutoSize = True
-        textPage.Location = New Point(415, 432)
+        textPage.Location = New Point(415, 413)
         textPage.Name = "textPage"
         textPage.Size = New Size(41, 15)
         textPage.TabIndex = 6
