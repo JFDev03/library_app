@@ -255,7 +255,7 @@ Partial Class mainLayout
         ' 
         profilePicture.Anchor = AnchorStyles.Top Or AnchorStyles.Right
         profilePicture.InitialImage = Nothing
-        profilePicture.Location = New Point(806, 9)
+        profilePicture.Location = New Point(819, 27)
         profilePicture.Name = "profilePicture"
         profilePicture.Size = New Size(64, 64)
         profilePicture.SizeMode = PictureBoxSizeMode.StretchImage

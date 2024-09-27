@@ -1,0 +1,499 @@
+axios config
+
+import { boot } from 'quasar/wrappers';
+import axios, { AxiosInstance } from 'axios';
+import { useAuthStore } from 'src/stores/authStore';
+
+declare module '@vue/runtime-core' {
+  interface ComponentCustomProperties {
+    $axios: AxiosInstance;
+    $api: AxiosInstance;
+  }
+}
+
+const api = axios.create({ baseURL: 'http://localhost:4000/api' });
+
+export default boot(({ app }) => {
+  // Initialize authStore inside the boot function
+  const authStore = useAuthStore();
+
+  // Request interceptor to add access token to headers
+  api.interceptors.request.use(
+    async (config) => {
+      // Await fetching the access token
+      await authStore.getAccessToken(); // Ensure the token is fetched properly
+      const token = authStore.accessToken;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  // Response interceptor to handle token refresh on 401 errors
+  api.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const originalRequest = error.config;
+
+      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true; // Mark the request as retried to avoid infinite loops
+
+        try {
+          // Await fetching the refresh token
+          await authStore.getRefreshToken();
+          const refreshToken = authStore.refreshToken;
+          if (!refreshToken) {
+            throw new Error('No refresh token available.');
+          }
+
+          // Call API to refresh token
+          const refreshResponse = await axios.post('http://localhost:4000/api/auth/refresh-token', { refreshToken });
+
+          // Update the access token and user data in the store
+          const newAccessToken = refreshResponse.data.accessToken;
+          const newUserResult = refreshResponse.data.user;
+          authStore.setAccessToken(newAccessToken);
+          authStore.setUserAuth(JSON.stringify(newUserResult));
+
+          // Update the original request with the new access token
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+          // Retry the original request with the new token
+          return axios(originalRequest);
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          // Handle the case where token refresh fails, possibly redirect to login
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  // Set axios and api globally for use in Vue components
+  app.config.globalProperties.$axios = axios;
+  app.config.globalProperties.$api = api;
+});
+
+export { api };
+
+
+config util
+
+import dotenv from "dotenv";
+import path from "path";
+
+dotenv.config();
+
+const MYSQL_HOST = process.env.MYSQLHOST || "localhost";
+const MYSQL_USER = process.env.MYSQLUSER || "root";
+const MYSQL_PASSWORD = process.env.MYSQLPASSWORD || "xReaper#666";
+const MYSQL_DATABASE = process.env.MYSQL_DATABASE || "default_db";
+
+const MYSQL = {
+  host: MYSQL_HOST,
+  database: MYSQL_DATABASE,
+  username: MYSQL_USER,
+  password: MYSQL_PASSWORD,
+};
+
+const SERVER_HOST = process.env.HOST || "localhost";
+const SERVER_PORT = process.env.MYSQL_PORT || 3306;
+const SERVER_ACCESS_TOKEN_EXPIRETIME = process.env.SERVER_ACCESS_TOKEN_EXPIRETIME || "60m";
+const SERVER_REFRESH_TOKEN_EXPIRETIME = process.env.SERVER_REFRESH_TOKEN_EXPIRETIME || "7d";
+const SERVER_TOKEN_ISSUER = process.env.SERVER_TOKEN_ISSUER || "MIT";
+const SERVER_SECRET_KEY = process.env.SERVER_SECRET_KEY || "default_secret";
+const SERVER_REFRESH_SECRET_KEY = process.env.SERVER_REFRESH_SECRET_KEY || "default_secret";
+
+const SERVER_RESET_SECRET_KEY = process.env.SERVER_RESET_SECRET_KEY || "default_secret";
+const SERVER_RESET_EXPIRETIME = process.env.SERVER_RESET_EXPIRETIME || "30m";
+
+const MYSQL_URL = `mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:${SERVER_PORT}/${MYSQL_DATABASE}`;
+
+const SERVER = {
+  hostname: SERVER_HOST,
+  port: SERVER_PORT,
+  token: {
+    refreshTokenExpireTime: SERVER_REFRESH_TOKEN_EXPIRETIME,
+    accessTokenExpireTime: SERVER_ACCESS_TOKEN_EXPIRETIME,
+    issuer: SERVER_TOKEN_ISSUER,
+    accessSecret: SERVER_SECRET_KEY,
+    refreshSecret: SERVER_REFRESH_SECRET_KEY,
+    resetAccessSecret: SERVER_RESET_SECRET_KEY,
+    resetTokenExpireTime: SERVER_RESET_EXPIRETIME,
+  },
+};
+
+const config = {
+  mysql: MYSQL,
+  server: SERVER,
+  mysqlurl: MYSQL_URL
+};
+
+export default config;
+
+
+executeQuery util
+
+import { Connect, Query } from "./mysql.util";
+
+const executeQuery = async (query: string, params: any[] = []) => {
+  try {
+    const connection = await Connect();
+    const result = await Query(connection, query, params);
+
+    connection.end();
+
+    return result;
+  } catch (error: any) {
+    console.error("Database query error: ", error.message, error);
+    throw error;
+  }
+};
+
+export default executeQuery;
+
+generate Token util
+
+import jwt from 'jsonwebtoken'
+import executeQuery from "./executeQuery.util";
+import config from "./config.util";
+
+
+
+export const generateRefreshToken = async(thisid:number)=>{
+    try {
+        const refreshToken = jwt.sign(
+            { id: thisid },
+            config.server.token.refreshSecret,
+            { expiresIn: config.server.token.refreshTokenExpireTime }
+        );
+    
+    
+        const insertRefreshTokenQuery = 'INSERT INTO refresh_token(user_id, refresh_token) VALUES (?, ?)';
+        await executeQuery(insertRefreshTokenQuery, [thisid, refreshToken]);
+    
+        return refreshToken;
+    } catch (error) {
+        console.error('Error generating refresh token:', error);
+        throw error; // or handle the error as needed
+    }
+    
+}
+
+export const generateAccessToken = (thisid:number)=>{
+    return jwt.sign(
+        {id:thisid},config.server.token.accessSecret,
+        {expiresIn:config.server.token.accessTokenExpireTime}
+    );
+}
+
+export const getRefreshTokenValue = (token:string)=>{
+    return jwt.verify(token,config.server.token.refreshSecret)
+}
+
+
+mysql util
+
+import mysql from "mysql2";
+import config from "./config.util";
+
+// Parameters for mysql connection
+const params = {
+  user: config.mysql.username,
+  password: config.mysql.password,
+  host: config.mysql.host,
+  database: config.mysql.database,
+};
+
+// Setting up the database connection
+const Connect = async () =>
+  new Promise<mysql.Connection>((resolve, reject) => {
+    const connection = mysql.createConnection(params);
+
+    connection.connect((error) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve(connection);
+    });
+  });
+
+// Setting up for query
+const Query = async <T>(
+  connection: mysql.Connection,
+  query: string,
+  params?: any[],
+) =>
+  new Promise<T>((resolve, reject) => {
+    connection.query(query, params, (error, result: any) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve(result);
+
+      connection.end();
+    });
+  });
+
+export { Connect, Query };
+
+
+verifytoken.util
+
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import config from './config.util';
+
+const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const user = await jwt.verify(token, config.server.token.accessSecret) as jwt.JwtPayload;
+
+    req.body.user = user;
+    next();
+  } catch (err) {
+    // Handle token verification errors
+    return res.status(401).json({ message: 'Unauthorized', error: err });
+  }
+};
+
+export default verifyToken;
+
+
+uploadimage middleware
+
+import multer, { StorageEngine, FileFilterCallback } from 'multer';
+import { Request } from 'express';
+
+// Define the storage configuration
+const storage: StorageEngine = multer.diskStorage({
+  destination: (_req: Request, _file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
+    cb(null, './src/public/images');
+  },
+  filename: (_req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
+    cb(null, file.originalname);
+  }
+});
+
+// Define the file filter for allowed MIME types
+const fileFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+// Export the upload middleware for a single file
+export const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter
+})
+
+
+auth controller
+
+import executeQuery from '../utils/executeQuery.util';
+import { Request,Response } from "express";
+import bcrypt from 'bcryptjs'
+import { userRegT,userLoginT,userDataT } from '@/types/users.types';
+import { generateAccessToken,generateRefreshToken,getRefreshTokenValue } from '../utils/generateToken.util';
+import { JwtPayload } from 'jsonwebtoken';
+
+
+export const createUser = async(req:Request,res:Response)=>{
+    try {
+        const CheckingQuery = 'Select username from user_tbl Where username = ?';
+        const insertQuery = 'INSERT INTO user_tbl(username,password)VALUES(?,?)';
+        const {username,password,confirm_password}:userRegT = req.body;
+        if(password !== confirm_password){
+            return res.status(403).send({message:"Passwords Doesnot Match"});
+        }
+        const [existUser] = await executeQuery(CheckingQuery,[username]) as Array<userDataT>;
+        if(existUser){
+            return res.status(403).send({message:"Username is Already in use"});
+        }else{
+
+        if (!password) {
+              throw new Error("Password is undefined or null.");
+        }
+            
+        const hashedPassword = await bcrypt.hash(password, 10);
+            
+        const response = await executeQuery(insertQuery,[username,hashedPassword]);
+        if(response){
+            return res.status(201).send({message:"User Created Successfully"});
+        }
+        }
+    } catch (error) {
+        console.error(error); // Log detailed error for debugging
+        return res.status(500).send({ message: "Something went wrong with the database." });
+    }
+}
+
+export const loginUser = async (req: Request, res: Response) => {
+    try {
+        const CheckingQuery = 'SELECT id, username, password, status FROM user_tbl WHERE username = ?';
+        const { username, password }: userLoginT = req.body;
+        const [user] = await executeQuery(CheckingQuery, [username]) as Array<userDataT>;
+
+        if (!user) {
+            return res.status(409).send({ message: "User does not exist!" });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password.toString(), user.password);
+        if (!isPasswordValid) {
+            return res.status(400).send({ message: "Password is incorrect" });
+        }
+
+        const thisaccessToken = generateAccessToken(user.id);
+        const thisrefreshToken = await generateRefreshToken(user.id);
+
+        return res.status(200).send({
+            message: 'Login Successful',
+            accessToken:thisaccessToken,
+            refreshToken:thisrefreshToken,
+            user: {
+                username: user.username,
+            }
+        });
+    } catch (error) {
+        console.error("Database Error: ", error); // Log detailed error for debugging
+        return res.status(500).send({ message: "Something went wrong with the database." });
+    }
+};
+export const Token = async(req:Request,res:Response)=>{
+    try {
+        const {refreshToken} = req.body;
+        const checkTokenQuery = 'SELECT refresh_token FROM refresh_token WHERE refresh_token = ?'
+        const getToken = await executeQuery(checkTokenQuery,[refreshToken]);
+
+        if(!getToken){
+            return res.status(404).send({message:'Token Invalid'})
+        }
+        const decoded = getRefreshTokenValue(refreshToken);
+        
+        if (typeof decoded === 'string') {
+            return res.status(400).send({ message: 'Invalid token format' });
+        }
+
+        const payload = decoded as JwtPayload;
+        const accessToken = generateAccessToken(payload.id);
+
+        const CheckingQuery = 'SELECT id, username, password, status FROM user_tbl WHERE id = ?';
+        const [user] = await executeQuery(CheckingQuery, [payload.id]) as Array<userDataT>;
+        if(!accessToken){
+            return res.status(404).send({message:'Error Generating AccessToken'})
+        }
+        return res.status(201).send({
+            message: 'Access Token Generated Successfully',
+            accessToken:accessToken,
+            user: {
+                username: user.username,
+            }
+        })
+
+    } catch (error) {
+        console.error("Database Error: ", error); // Log detailed error for debugging
+        return res.status(500).send({ message: "Something went wrong with the database." });
+    }
+}
+
+export const logout = async(req:Request,res:Response)=>{
+    try {
+        const userAuth = req.body.user;
+        const DeleteQuery = 'DELETE FROM refresh_token WHERE user_id = ?'
+        const result = await executeQuery(DeleteQuery,[userAuth.id]);
+        if(!result){
+            return res.status(404).send({message:'User Not Found'})
+        }
+        return res.status(200).send({message:'User Successfully Logout'})
+    } catch (error) {
+        console.error("Database Error: ", error); // Log detailed error for debugging
+        return res.status(500).send({ message: "Something went wrong with the database." });
+    }
+}
+
+app.ts
+
+import path from "path";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import bodyParser from "body-parser";
+import express, { Express } from "express";
+import auth from "./routes/auth.routes";
+import admin from "./routes/admin.routes"
+import user from "./routes/user.routes";
+
+const app: Express = express();
+const PORT: number = Number(process.env.PORT) || 3000;
+
+// Logging
+app.use(morgan("dev"));
+
+// Parse the request
+app.use(express.urlencoded({ extended: false }));
+
+// Takes care of json data
+app.use(express.json({ limit: "100mb" })); // Setting the data size of an json
+app.use(bodyParser.json());
+app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONT_END_HOST, // Replace with your client app's URL
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+};
+app.use(cors(corsOptions));
+app.use(helmet());
+
+// Api routes
+app.use('/api/auth',auth)
+app.use('/api/admin',admin)
+app.use('/api/user',user)
+
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  next();
+});
+
+app.use('/getImage/', express.static('src/public'));
+
+
+// Default route
+app.get('/', (req, res) => {
+  return res.status(200).json({ message: 'OK' });
+});
+
+// Error Handling
+app.use((req, res, next) => {
+  const error = new Error("Not Found");
+  return res.status(404).json({
+    message: error.message,
+  });
+});
+
+app.listen(PORT, () => {
+  console.info(`Server listening on Port ${PORT}`);
+});
+
+
+
+

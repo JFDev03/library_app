@@ -29,11 +29,11 @@ Partial Class Form1
         Label1 = New Label()
         Label2 = New Label()
         Label3 = New Label()
-        TextBox1 = New TextBox()
-        TextBox2 = New TextBox()
+        employeeIDInput = New TextBox()
+        passwordInput = New TextBox()
         Label4 = New Label()
         Label5 = New Label()
-        Button1 = New Button()
+        submitData = New Button()
         Label6 = New Label()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
@@ -102,23 +102,25 @@ Partial Class Form1
         Label3.TabIndex = 5
         Label3.Text = "Sign In"
         ' 
-        ' TextBox1
+        ' employeeIDInput
         ' 
-        TextBox1.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
-        TextBox1.Location = New Point(474, 165)
-        TextBox1.Multiline = True
-        TextBox1.Name = "TextBox1"
-        TextBox1.Size = New Size(280, 35)
-        TextBox1.TabIndex = 6
+        employeeIDInput.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
+        employeeIDInput.Location = New Point(474, 165)
+        employeeIDInput.Multiline = True
+        employeeIDInput.Name = "employeeIDInput"
+        employeeIDInput.Size = New Size(280, 35)
+        employeeIDInput.TabIndex = 6
+        employeeIDInput.Text = "Enter your Employee ID"
         ' 
-        ' TextBox2
+        ' passwordInput
         ' 
-        TextBox2.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
-        TextBox2.Location = New Point(474, 234)
-        TextBox2.Multiline = True
-        TextBox2.Name = "TextBox2"
-        TextBox2.Size = New Size(280, 35)
-        TextBox2.TabIndex = 7
+        passwordInput.Font = New Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point)
+        passwordInput.Location = New Point(474, 234)
+        passwordInput.Multiline = True
+        passwordInput.Name = "passwordInput"
+        passwordInput.Size = New Size(280, 35)
+        passwordInput.TabIndex = 7
+        passwordInput.Text = "Enter your Password"
         ' 
         ' Label4
         ' 
@@ -126,9 +128,9 @@ Partial Class Form1
         Label4.Font = New Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point)
         Label4.Location = New Point(484, 149)
         Label4.Name = "Label4"
-        Label4.Size = New Size(73, 20)
+        Label4.Size = New Size(92, 20)
         Label4.TabIndex = 8
-        Label4.Text = "username"
+        Label4.Text = "employee id"
         ' 
         ' Label5
         ' 
@@ -140,17 +142,17 @@ Partial Class Form1
         Label5.TabIndex = 9
         Label5.Text = "password"
         ' 
-        ' Button1
+        ' submitData
         ' 
-        Button1.BackColor = Color.SteelBlue
-        Button1.Font = New Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point)
-        Button1.ForeColor = SystemColors.ControlLightLight
-        Button1.Location = New Point(476, 308)
-        Button1.Name = "Button1"
-        Button1.Size = New Size(277, 50)
-        Button1.TabIndex = 10
-        Button1.Text = "Sign In"
-        Button1.UseVisualStyleBackColor = False
+        submitData.BackColor = Color.SteelBlue
+        submitData.Font = New Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point)
+        submitData.ForeColor = SystemColors.ControlLightLight
+        submitData.Location = New Point(476, 308)
+        submitData.Name = "submitData"
+        submitData.Size = New Size(277, 50)
+        submitData.TabIndex = 10
+        submitData.Text = "Sign In"
+        submitData.UseVisualStyleBackColor = False
         ' 
         ' Label6
         ' 
@@ -169,11 +171,11 @@ Partial Class Form1
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(Label6)
-        Controls.Add(Button1)
+        Controls.Add(submitData)
         Controls.Add(Label5)
         Controls.Add(Label4)
-        Controls.Add(TextBox2)
-        Controls.Add(TextBox1)
+        Controls.Add(passwordInput)
+        Controls.Add(employeeIDInput)
         Controls.Add(Label3)
         Controls.Add(Label2)
         Controls.Add(Label1)
@@ -196,10 +198,10 @@ Partial Class Form1
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
     Friend WithEvents Label3 As Label
-    Friend WithEvents TextBox1 As TextBox
-    Friend WithEvents TextBox2 As TextBox
+    Friend WithEvents employeeIDInput As TextBox
+    Friend WithEvents passwordInput As TextBox
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents Button1 As Button
+    Friend WithEvents submitData As Button
     Friend WithEvents Label6 As Label
 End Class

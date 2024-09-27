@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Compile Update="components\BooksComponents\BookViewingModalBorrow.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="components\classComponents\RoundedButtonDocker.vb">
       <SubType>Component</SubType>
     </Compile>
@@ -10,7 +13,19 @@
     <Compile Update="components\classComponents\RoundPicturebox.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="components\formComponents\books.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="components\formComponents\borrow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="components\formComponents\dashboard.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="components\loadingComponents\mainLoadingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="components\modals\addBooksModal.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Form1.vb">

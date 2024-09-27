@@ -44,3 +44,9 @@ C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-w
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.vbproj.AssemblyReference.cache
 C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.vbproj.CopyComplete
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.books.resources
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.borrow.resources
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.dashboard.resources
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.addBooksModal.resources
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\bin\Debug\net6.0-windows\System.Reactive.dll
+C:\Users\asjo\source\repos\LibrarySytem\desktopApp\desktopApp\obj\Debug\net6.0-windows\desktopApp.BookViewingModalBorrow.resources
